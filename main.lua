@@ -56,9 +56,21 @@ local ROC = {
     roc = 0,
 }
 function ROC.findROC(x, y)
+    print("\n .......... \n playerShip Locatio 2")
+    print(y .. "   ".. x)
+    print("\n ..........")
     ROC.roc = (ROC.y1 - y)/(ROC.x1 - x)
+    --ROC.roc = 
 
-    ROC.x1, ROC.y1 = x, y
+    
+    print(ROC.y1 .. " " .. y)
+    print(ROC.y1 - y)
+    print(ROC.x1 .. " " .. x)
+    print(ROC.x1 - x)
+    print(ROC.roc)
+    print("\n ..............")
+    ROC.x1 = x
+    ROC.y1 = y
     return ROC.roc
 end
 
@@ -179,6 +191,9 @@ function createPlayerShip(shipX, shipY)
             playerShip.shipSpeed = playerShip.shipSpeed + 3
         elseif love.mouse.isDown(1) == false and playerShip.shipSpeed > 0 then
             playerShip.shipSpeed = playerShip.shipSpeed - 3
+            if playerShip.shipSpeed < 0 then
+                playerShip.shipSpeed = 0
+            end
         end
         --]]
 
@@ -207,9 +222,13 @@ function createPlayerShip(shipX, shipY)
             (math.cos(playerShip.findAbsoluteAngle()) * playerShip.shipSpeed * dt)
         --end
 
+        print("\n .......... \n playerShip Location")
+        print(playerShip.shipY_Location .. "   ".. playerShip.shipX_Location)
+        print("Ship Speed" .. playerShip.shipSpeed)
+        print("\n ..........")
 
         rateOfChange = ROC.findROC(playerShip.shipY_Location, playerShip.shipX_Location)
-        print(rateOfChange)
+        --print(rateOfChange)
     end
 
     function playerShip.draw()
@@ -220,6 +239,7 @@ function createPlayerShip(shipX, shipY)
             playerShip.shipAngle * -1, 1, 1,
             simpleShipImg:getWidth() / 2,
             simpleShipImg:getHeight() / 2)
+        love.graphics.print(rateOfChange, 300, 10)
     end
 
     function playerShip.getPlayerShipSpeed()
