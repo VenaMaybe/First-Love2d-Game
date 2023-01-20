@@ -50,6 +50,22 @@ function entities.update(dt)
     end
 end
 
+local ROC = {
+    x1 = 0,
+    y1 = 0,
+    roc = nil,
+}
+function ROC.findROC(x, y)
+
+    if x1 == nil or y1 == nil then
+        print("uwuwuuwuwuwu\n\n")
+    end
+
+    roc = (y1 - y)/(x1 - x)
+
+    x1, y1 = x, y
+    return roc
+end
 
 function createBullet(x, y, r)
     local bullet = {
@@ -106,6 +122,10 @@ function createPlayerShip(shipX, shipY)
     local playerShip = {
         shipX_Location = shipX or 0,
         shipY_Location = shipY or 0,
+
+        shipX_Velocity = 0,
+        shipY_Velocity = 0,
+
         absoluteAngle = 0,
 
         shipSpeed = 10,
@@ -148,6 +168,8 @@ function createPlayerShip(shipX, shipY)
         end
     end
 
+    local rateOfChange = 0
+
     function playerShip.update(dt)
         local mouseX, mouseY = love.mouse.getPosition()
         updateDistances(mouseX, mouseY)
@@ -157,38 +179,42 @@ function createPlayerShip(shipX, shipY)
         --make it so speed gets lower when player gets closer to curser?
 
 
-
+        --[-[
         if love.mouse.isDown(1) and playerShip.shipSpeed < 300 then
-            playerShip.shipSpeed = playerShip.shipSpeed + 5.5
-        elseif love.mouse.isDown(1) == false and playerShip.shipSpeed > 100 then
+            playerShip.shipSpeed = playerShip.shipSpeed + 3
+        elseif love.mouse.isDown(1) == false and playerShip.shipSpeed > 0 then
             playerShip.shipSpeed = playerShip.shipSpeed - 3
         end
+        --]]
 
         
         playerShip.absoluteAngle = playerShip.absoluteAngle - math.pi
 
-        
+        --[[
         if playerShip.shipDistToCursor < 2 then
             playerShip.shipAngle = playerShip.shipAngle
         else
             playerShip.shipAngle = playerShip.absoluteAngle
         end
+        --]]
 
+        playerShip.shipAngle = playerShip.absoluteAngle
 
         -- The sin/cos determin how much to go in a specific direction bi-directonally
 
-        if playerShip.shipX_Location ~= mouseX then
-            playerShip.shipX_Location = playerShip.shipX_Location + (math.sin(playerShip.findAbsoluteAngle()) * playerShip.shipSpeed * dt)
-        end
+        --if playerShip.shipX_Location ~= mouseX then
+            playerShip.shipX_Location = playerShip.shipX_Location + playerShip.shipX_Velocity +
+            (math.sin(playerShip.findAbsoluteAngle()) * playerShip.shipSpeed * dt)
+        --end
 
-        if playerShip.shipY_Location ~= mouseY then
-            playerShip.shipY_Location = playerShip.shipY_Location + (math.cos(playerShip.findAbsoluteAngle()) * playerShip.shipSpeed * dt)
-        end
+        --if playerShip.shipY_Location ~= mouseY then
+            playerShip.shipY_Location = playerShip.shipY_Location + playerShip.shipY_Velocity +
+            (math.cos(playerShip.findAbsoluteAngle()) * playerShip.shipSpeed * dt)
+        --end
 
 
-
-        -- Makes shipAngle not go wild when near curser
-        
+        rateOfChange = ROC.findROC(playerShip.shipY_Location, playerShip.shipX_Location)
+        print(rateOfChange)
     end
 
     function playerShip.draw()
@@ -198,7 +224,7 @@ function createPlayerShip(shipX, shipY)
             playerShip.shipY_Location,
             playerShip.shipAngle * -1, 1, 1,
             simpleShipImg:getWidth() / 2,
-            simpleShipImg:getHeight() / 4)
+            simpleShipImg:getHeight() / 2)
     end
 
     function playerShip.getPlayerShipSpeed()
