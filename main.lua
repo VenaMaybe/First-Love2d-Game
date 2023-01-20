@@ -53,18 +53,13 @@ end
 local ROC = {
     x1 = 0,
     y1 = 0,
-    roc = nil,
+    roc = 0,
 }
 function ROC.findROC(x, y)
+    ROC.roc = (ROC.y1 - y)/(ROC.x1 - x)
 
-    if x1 == nil or y1 == nil then
-        print("uwuwuuwuwuwu\n\n")
-    end
-
-    roc = (y1 - y)/(x1 - x)
-
-    x1, y1 = x, y
-    return roc
+    ROC.x1, ROC.y1 = x, y
+    return ROC.roc
 end
 
 function createBullet(x, y, r)
