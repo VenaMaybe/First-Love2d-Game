@@ -1,0 +1,6 @@
+{
+    "lövelauncher.path": "C:\\Dev\\Lua\\LOVE\\love.exe",
+    "Lua.diagnostics.globals": [
+        "love"
+    ]
+}
