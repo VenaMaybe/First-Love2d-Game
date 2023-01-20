@@ -164,15 +164,7 @@ function createPlayerShip(shipX, shipY)
             playerShip.shipSpeed = playerShip.shipSpeed - 3
         end
 
-        --[[
-        if playerShip.shipX_Location ~= mouseX or playerShip.shipY_Location ~= mouseY then
-            playerShip.shipX_Location = playerShip.shipX_Location +
-                math.sin(playerShip.findAbsoluteAngle()) * playerShip.shipSpeed * dt
-            playerShip.shipY_Location = playerShip.shipY_Location +
-                math.cos(playerShip.findAbsoluteAngle()) * playerShip.shipSpeed * dt
-        end
-        --]]
-
+        
         playerShip.absoluteAngle = playerShip.absoluteAngle - math.pi
 
         
